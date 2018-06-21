@@ -1,0 +1,8 @@
+For each iteration of the loop, an internal file pointer gets updated. When the next read happens, the
+data starting from the file pointer offset, and upto the size of the buffer gets returned. This pointer
+is not a construct of the language, but is one of the OS. On linux, this pointer is a property of the file
+descriptor that gets created. All the read/Read calls (in Ruby/Go respectively) get translated internally
+to system calls and sent to the kernel, and the kernel manages this pointer.
+What if we wanted to speed up the processing of the chunks mentioned above? One way to do that is to use
+multiple go routines! The one extra work we need to do compared to reading chunks serially is we need to know
+the offset for each routine. Note that
