@@ -1,4 +1,4 @@
-package user
+package video
 
 import (
 	"encoding/json"
@@ -13,7 +13,7 @@ func Post(w http.ResponseWriter, r *http.Request) {
 	var errs []string
 	var gocqlUuid gocql.UUID
 
-	user, errs := FormToUser(r)
+	video, errs := FormToVideo(r)
 
 	created := false
 	if len(errs) == 0 {
@@ -21,8 +21,9 @@ func Post(w http.ResponseWriter, r *http.Request) {
 
 		gocqlUuid = gocql.TimeUUID()
 		if err := cassandra.Session.Query(`
-			INSERT INTO users (id, firstname, lastname, email, city, age) VALUES (?, ?, ?, ?, ?, ?)`,
-			gocqlUuid, user.FirstName, user.LastName, user.Email, user.City, user.Age).Exec(); err != nil {
+			INSERT INTO video_by_tag (video_id, added_date, title, tag) 
+			VALUES ( ?, toUnixTimestamp(now()), ?, ?)`,
+			gocqlUuid, video.Title, video.Tag).Exec(); err != nil {
 			errs = append(errs, err.Error())
 		} else {
 			created = true
@@ -31,7 +32,7 @@ func Post(w http.ResponseWriter, r *http.Request) {
 	}
 	if created {
 		fmt.Println("user_id", gocqlUuid)
-		json.NewEncoder(w).Encode(NewUserResponse{ID: gocqlUuid})
+		json.NewEncoder(w).Encode(NewVideoResponse{ID: gocqlUuid})
 	} else {
 		fmt.Println("errors", errs)
 		json.NewEncoder(w).Encode(ErrorResponse{Errors: errs})

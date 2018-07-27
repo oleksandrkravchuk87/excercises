@@ -12,8 +12,8 @@ var Session *gocql.Session
 func init() {
 	var err error
 
-	cluster := gocql.NewCluster("172.17.0.2", "172.17.0.3")
-	cluster.Keyspace = "streamdemoapi"
+	cluster := gocql.NewCluster("127.0.0.1")
+	cluster.Keyspace = "killrvideo"
 	Session, err = cluster.CreateSession()
 	if err != nil {
 		log.Fatal(err)

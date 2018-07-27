@@ -7,7 +7,7 @@ import (
 
 	"excercises/cassandratest/cassandra"
 
-	"excercises/cassandratest/user"
+	"excercises/cassandratest/video"
 
 	"github.com/gorilla/mux"
 )
@@ -25,10 +25,11 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/", heartbeat).Methods(http.MethodGet)
-	router.HandleFunc("/users/new", user.Post).Methods(http.MethodPost)
-	router.HandleFunc("/users", user.GetAll).Methods(http.MethodGet)
+	router.HandleFunc("/videos/new", video.Post).Methods(http.MethodPost)
+	router.HandleFunc("/videos", video.GetAll).Methods(http.MethodGet)
+	router.HandleFunc("/videos", video.Delete).Methods(http.MethodDelete)
 
-	log.Fatal(http.ListenAndServe(":8181", router))
+	log.Fatal(http.ListenAndServe(":8182", router))
 }
 
 func heartbeat(w http.ResponseWriter, r *http.Request) {

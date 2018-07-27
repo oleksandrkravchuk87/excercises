@@ -4,20 +4,34 @@ import (
 	"fmt"
 )
 
-type I interface {
-	some()
+// Clock API:
+//
+type Clock struct {
+	m int
 }
 
-type T struct {
+func New(hour, minute int) Clock {
+
+	c := Clock{(hour*60 + minute) % (24 * 60)}
+
+	if c.m < 0 {
+		c.m = 24*60 + c.m
+	}
+
+	return c
 }
 
-func (t T) some() {
-	fmt.Println("some")
+func (c Clock) String() string {
+	h := c.m / 60
+	m := c.m % 60
+	return fmt.Sprintf("%02d:%02d", h, m)
+}
+
+func (c Clock) Add(minutes int) Clock {
+	return New(0, c.m+minutes)
 }
 
 func main() {
-	var i I
-	i = &T{}
-	i.some()
-
+	c := New(-25, -160)
+	fmt.Println(c)
 }
