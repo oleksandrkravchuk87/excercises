@@ -20,10 +20,7 @@ func TestAddGigasecond(t *testing.T) {
 		want := parse(tc.want, t)
 		got := AddGigasecond(in)
 		if !got.Equal(want) {
-			t.Fatalf(`FAIL: %s
-AddGigasecond(%s)
-   = %s
-want %s`, tc.description, in, got, want)
+			t.Fatalf(`FAIL: %s AddGigasecond(%s) = %s want %s`, tc.description, in, got, want)
 		}
 		t.Log("PASS:", tc.description)
 	}
@@ -56,7 +53,6 @@ func BenchmarkAddGigasecond(b *testing.B) {
 		AddGigasecond(time.Time{})
 	}
 }
-
 
 var addCases = []struct {
 	description string
